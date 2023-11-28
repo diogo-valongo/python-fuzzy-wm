@@ -31,7 +31,7 @@ navigation_ctrl = ctrl.ControlSystem(rules)
 fis = ctrl.ControlSystemSimulation(navigation_ctrl)
 
 age = 18
-jobs =5
+jobs = 10
 fis.input['age'] = age
 fis.input['jobs'] = jobs
 fis.compute()

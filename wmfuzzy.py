@@ -5,7 +5,6 @@ from skfuzzy import control as ctrl
 soil = ctrl.Antecedent(np.arange(0, 100, 1), 'soil')
 mass = ctrl.Antecedent(np.arange(0, 20, 1), 'mass')
 tempoLavagem = ctrl.Antecedent(np.arange(20, 130, 1), 'tempo lavagem(min)')
-#temperatura = ctrl.Antecedent(np.arange(30, 60, 1), 'temperatura(c)')
 frequencia = ctrl.Antecedent(np.arange(400, 1200, 100), 'frequencia(rpm)')
 
 qualidadeLavagem = ctrl.Consequent(np.arange(0, 100, 1), 'qualidade lavagem')
@@ -24,11 +23,11 @@ tempoLavagem['rapido'] = fuzz.trimf(tempoLavagem.universe, [20, 20, 45])
 tempoLavagem['normal'] = fuzz.trimf(tempoLavagem.universe, [40, 70, 80])
 tempoLavagem['devagar'] = fuzz.trimf(tempoLavagem.universe, [60, 130, 130])
 
-frequencia['v1'] = fuzz.trimf(frequencia.universe, [400, 400, 410])
-frequencia['v2'] = fuzz.trimf(frequencia.universe, [590, 600, 610])
-frequencia['v3'] = fuzz.trimf(frequencia.universe, [790, 800, 810])
-frequencia['v4'] = fuzz.trimf(frequencia.universe, [990, 1000, 1010])
-frequencia['v5'] = fuzz.trimf(frequencia.universe, [1190, 1200, 1200])
+frequencia['v1'] = fuzz.trimf(frequencia.universe, [400, 400, 500])
+frequencia['v2'] = fuzz.trimf(frequencia.universe, [500, 600, 700])
+frequencia['v3'] = fuzz.trimf(frequencia.universe, [600, 800, 900])
+frequencia['v4'] = fuzz.trimf(frequencia.universe, [800, 1000, 1100])
+frequencia['v5'] = fuzz.trimf(frequencia.universe, [1100, 1200, 1200])
 
 qualidadeLavagem['ruim'] = fuzz.trimf(qualidadeLavagem.universe, [0, 0, 35])
 qualidadeLavagem['medio'] = fuzz.trimf(qualidadeLavagem.universe, [30, 50, 60])
@@ -36,6 +35,7 @@ qualidadeLavagem['otima'] = fuzz.trimf(qualidadeLavagem.universe, [50, 100, 100]
 
 rules = []
 
+#region lista de regras
 rules.append(ctrl.Rule(soil['limpo'] & mass['leve'] & tempoLavagem['rapido'] & frequencia['v1'], qualidadeLavagem['otima']))
 rules.append(ctrl.Rule(soil['limpo'] & mass['leve'] & tempoLavagem['rapido'] & frequencia['v2'], qualidadeLavagem['otima']))
 rules.append(ctrl.Rule(soil['limpo'] & mass['leve'] & tempoLavagem['rapido'] & frequencia['v3'], qualidadeLavagem['otima']))
@@ -216,16 +216,15 @@ rules.append(ctrl.Rule(soil['muito sujo'] & mass['pesado'] & tempoLavagem['devag
 rules.append(ctrl.Rule(soil['muito sujo'] & mass['pesado'] & tempoLavagem['devagar'] & frequencia['v3'], qualidadeLavagem['ruim']))
 rules.append(ctrl.Rule(soil['muito sujo'] & mass['pesado'] & tempoLavagem['devagar'] & frequencia['v4'], qualidadeLavagem['medio']))
 rules.append(ctrl.Rule(soil['muito sujo'] & mass['pesado'] & tempoLavagem['devagar'] & frequencia['v5'], qualidadeLavagem['medio']))
-
-
+#endregion
 
 navigation_ctrl = ctrl.ControlSystem(rules)
 fis = ctrl.ControlSystemSimulation(navigation_ctrl)
 
 testeSoil = 43
-testeMass = 14
+testeMass = 7
 testeTempoLavagem = 67
-testeFrequencia = 800
+testeFrequencia = 700
 
 fis.input['soil'] = testeSoil
 fis.input['mass'] = testeMass
@@ -234,3 +233,4 @@ fis.input['frequencia(rpm)'] = testeFrequencia
 fis.compute()
 
 print(fis.output['qualidade lavagem'])
+

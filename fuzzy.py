@@ -18,7 +18,6 @@ salary['low'] = fuzz.trimf(salary.universe, [1500, 1500, 2500])
 salary['medium'] = fuzz.trimf(salary.universe, [2000, 5000, 7000])
 salary['high'] = fuzz.trimf(salary.universe, [6000, 10000, 10000])
 
-
 rules = []
 
 rules.append(ctrl.Rule(age['young'] | jobs['few'], salary['low']))
